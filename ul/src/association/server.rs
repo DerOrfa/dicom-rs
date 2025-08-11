@@ -875,6 +875,7 @@ where
 
 #[cfg(feature = "async")]
 pub mod non_blocking {
+    use crate::association::AsyncPDataWriter;
     use std::{borrow::Cow, io::Cursor};
 
     use bytes::{Buf, BytesMut};
@@ -1212,6 +1213,21 @@ pub mod non_blocking {
             }
         }
 
+        /// Prepare a P-Data writer for sending
+        /// one or more data items.
+        ///
+        /// Returns a writer which automatically
+        /// splits the inner data into separate PDUs if necessary.
+        pub fn send_pdata(
+            &mut self,
+            presentation_context_id: u8,
+        ) -> AsyncPDataWriter<&mut tokio::net::TcpStream> {
+            AsyncPDataWriter::new(
+                &mut self.socket,
+                presentation_context_id,
+                self.requestor_max_pdu_length,
+            )
+        }
         pub fn inner_stream(&mut self) -> &mut TcpStream {
             &mut self.socket
         }

@@ -1549,7 +1549,7 @@ pub mod non_blocking {
         ///
         /// Returns a writer which automatically
         /// splits the inner data into separate PDUs if necessary.
-        pub async fn send_pdata(
+        pub fn send_pdata(
             &mut self,
             presentation_context_id: u8,
         ) -> AsyncPDataWriter<&mut tokio::net::TcpStream> {
